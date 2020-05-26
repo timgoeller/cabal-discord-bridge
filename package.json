@@ -1,0 +1,16 @@
+{
+  "name": "cabal-discord-bridge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "cabal-bot-core": "^1.0.1",
+    "cabal-bot-pipeline": "^1.0.0",
+    "discord.js": "^12.2.0"
+  }
+}
