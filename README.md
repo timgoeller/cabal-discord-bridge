@@ -1,0 +1,1 @@
+cabal-discord-bridge
