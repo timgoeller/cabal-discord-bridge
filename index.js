@@ -18,8 +18,10 @@ discordBot.on('ready', () => {
   discordBot.on('message', msg => {
     const cabalChannelsToForwardTo = new Set()
     config.mappings.forEach(mapping => {
-      if (mapping.discord.includes('*') || mapping.discord.includes(msg.channel.name)) {
-        mapping.cabal.forEach(cabalMapping => cabalChannelsToForwardTo.add(cabalMapping))
+      if (mapping.from === 'discord' || mapping.from === 'both') {
+        if (mapping.discord.includes('*') || mapping.discord.includes(msg.channel.name)) {
+          mapping.cabal.forEach(cabalMapping => cabalChannelsToForwardTo.add(cabalMapping))
+        }
       }
     })
     cabalBot.broadcast(cabalChannelsToForwardTo, msg.content)
