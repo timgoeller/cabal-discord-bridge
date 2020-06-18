@@ -1,0 +1,9 @@
+{
+  "name": "Cabal-Discord-Brige", 
+  "mappings": [
+    {"discord": ["*"], "cabal": ["default"]}, 
+    {"discord": ["introduction", "bio"], "cabal": ["new-people"]
+  }],
+  "cabalKey": "{cabal-key}",
+  "discordToken": "{discord-token}"
+}
