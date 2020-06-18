@@ -1,9 +1,9 @@
 {
   "name": "Cabal-Discord-Brige",
   "mappings": [
-    { "discord": ["*"], 
+    { "discord": ["general"], 
       "cabal": ["default"], 
-      "from": "both" },
+      "from": "cabal" },
     {
       "discord": ["introduction", "bio"],
       "cabal": ["new-people"],

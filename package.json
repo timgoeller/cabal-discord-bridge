@@ -10,7 +10,6 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "cabal-bot-core": "^1.0.2",
-    "cabal-bot-pipeline": "^1.0.0",
     "cabal-client": "^5.0.0",
     "discord.js": "^12.2.0"
   }

@@ -1,5 +1,4 @@
 var CabalBot = require('cabal-bot-core')
-var pipeline = require('cabal-bot-pipeline')
 const Discord = require('discord.js')
 
 const fs = require('fs')
@@ -13,6 +12,11 @@ try {
 const discordBot = new Discord.Client()
 
 const cabalBot = new CabalBot('discord-bridge')
+
+cabalBot.joinCabal(config.cabalKey)
+discordBot.login(config.discordSecret)
+
+//* doesn't fully work yet, won't send messages from channel x to all channels yet
 
 discordBot.on('ready', () => {
   discordBot.on('message', msg => {
@@ -28,5 +32,20 @@ discordBot.on('ready', () => {
   })
 })
 
-cabalBot.joinCabal(config.cabalKey)
-discordBot.login(config.discordSecret)
+cabalBot.on('new-message', (envelope, cabalDetails) => {
+  const discordChannelsToForwardTo = new Set()
+
+  config.mappings.forEach(mapping => {
+    if (mapping.from === 'cabal' || mapping.from === 'both') {
+      if (mapping.cabal.includes('*') || mapping.cabal.includes(envelope.channel)) {
+        mapping.discord.forEach(discordMapping => discordChannelsToForwardTo.add(discordMapping))
+      }
+    }
+  })
+
+  discordBot.channels.cache.forEach(discordChannel => {
+    if (discordChannelsToForwardTo.has(discordChannel.name)) {
+      discordChannel.send(envelope.message.value.content.text)
+    }
+  })
+})
