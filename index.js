@@ -11,7 +11,10 @@ try {
 
 const discordBot = new Discord.Client()
 
-const cabalBot = new CabalBot('discord-bridge')
+if (!config.name) {
+  config.name = 'discord-bridge'
+}
+const cabalBot = new CabalBot(config.name)
 
 cabalBot.joinCabal(config.cabalKey)
 discordBot.login(config.discordSecret)
