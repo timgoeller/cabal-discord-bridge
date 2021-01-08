@@ -20,21 +20,22 @@ discordBot.login(config.discordSecret)
 
 discordBot.on('ready', () => {
   discordBot.on('message', msg => {
-    const cabalChannelsToForwardTo = new Set()
-    config.mappings.forEach(mapping => {
-      if (mapping.from === 'discord' || mapping.from === 'both') {
-        if (mapping.discord.includes('*') || mapping.discord.includes(msg.channel.name)) {
-          mapping.cabal.forEach(cabalMapping => cabalChannelsToForwardTo.add(cabalMapping))
+    if(discordBot.user.id !== msg.author.id) {
+      const cabalChannelsToForwardTo = new Set()
+      config.mappings.forEach(mapping => {
+        if (mapping.from === 'discord' || mapping.from === 'both') {
+          if (mapping.discord.includes('*') || mapping.discord.includes(msg.channel.name)) {
+            mapping.cabal.forEach(cabalMapping => cabalChannelsToForwardTo.add(cabalMapping))
+          }
         }
-      }
-    })
-    cabalBot.broadcast(cabalChannelsToForwardTo, msg.content)
+      })
+      cabalBot.broadcast(cabalChannelsToForwardTo, msg.content)
+    }
   })
 })
 
 cabalBot.on('new-message', (envelope, cabalDetails) => {
   const discordChannelsToForwardTo = new Set()
-
   config.mappings.forEach(mapping => {
     if (mapping.from === 'cabal' || mapping.from === 'both') {
       if (mapping.cabal.includes('*') || mapping.cabal.includes(envelope.channel)) {
