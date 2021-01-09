@@ -56,7 +56,11 @@ function processMessageFromDiscord (msg, hooks) {
         }
       }
     })
-    cabalBot.broadcast(cabalChannelsToForwardTo, `(${msg.author.username}@discord): ${msg.content}`)
+
+    const attachments = msg.attachments.reduce((attachmentString, attachment) => {
+      return attachmentString + `[${attachment.name}](${attachment.url}) `
+    }, '')
+    cabalBot.broadcast(cabalChannelsToForwardTo, `_${msg.author.username}@discord_: ${attachments}${msg.content}`)
   }
 }
 
