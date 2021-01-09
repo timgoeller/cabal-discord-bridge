@@ -1,8 +1,8 @@
 {
-  "name": "Cabal-Discord-Brige",
+  "name": "Cabal-Discord-Bridge",
   "mappings": [
-    { "discord": ["general"], 
-      "cabal": ["default"], 
+    { "discord": ["general"],
+      "cabal": ["default"],
       "from": "cabal" },
     {
       "discord": ["introduction", "bio"],
@@ -11,5 +11,5 @@
     }
   ],
   "cabalKey": "{cabal-key}",
-  "discordToken": "{discord-token}"
+  "discordSecret": "{discord-token}"
 }
