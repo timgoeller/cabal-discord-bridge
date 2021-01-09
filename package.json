@@ -11,5 +11,8 @@
   "dependencies": {
     "cabal-bot-core": "^1.0.6",
     "discord.js": "^12.5.1"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3"
   }
 }
