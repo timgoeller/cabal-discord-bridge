@@ -56,7 +56,7 @@ function processMessageFromDiscord (msg, hooks) {
         }
       }
     })
-    cabalBot.broadcast(cabalChannelsToForwardTo, msg.content)
+    cabalBot.broadcast(cabalChannelsToForwardTo, `(${msg.author.username}@discord): ${msg.content}`)
   }
 }
 
