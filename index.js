@@ -14,7 +14,16 @@ const discordBot = new Discord.Client()
 if (!config.name) {
   config.name = 'discord-bridge'
 }
-const cabalBot = new CabalBot(config.name)
+
+const cabalOpts = {
+  clientOpts: {
+    config: {
+      temp: true
+    }
+  }
+}
+
+const cabalBot = new CabalBot(config.name, cabalOpts)
 
 cabalBot.joinCabal(config.cabalKey)
 discordBot.login(config.discordSecret)
