@@ -31,22 +31,26 @@ discordBot.login(config.discordSecret)
 //* doesn't fully work yet, won't send messages from channel x to all channels yet
 
 discordBot.on('ready', () => {
-  discordBot.on('message', msg => {
-    if(discordBot.user.id !== msg.author.id) {
-      const cabalChannelsToForwardTo = new Set()
-      config.mappings.forEach(mapping => {
-        if (mapping.from === 'discord' || mapping.from === 'both') {
-          if (mapping.discord.includes('*') || mapping.discord.includes(msg.channel.name)) {
-            mapping.cabal.forEach(cabalMapping => cabalChannelsToForwardTo.add(cabalMapping))
-          }
-        }
-      })
-      cabalBot.broadcast(cabalChannelsToForwardTo, msg.content)
-    }
-  })
+  discordBot.on('message', msg => processMessageFromDiscord(msg))
 })
 
-cabalBot.on('new-message', (envelope, cabalDetails) => {
+cabalBot.on('new-message', (envelope) => processMessageFromCabal(envelope))
+
+function processMessageFromDiscord(msg) {
+  if(discordBot.user.id !== msg.author.id) {
+    const cabalChannelsToForwardTo = new Set()
+    config.mappings.forEach(mapping => {
+      if (mapping.from === 'discord' || mapping.from === 'both') {
+        if (mapping.discord.includes('*') || mapping.discord.includes(msg.channel.name)) {
+          mapping.cabal.forEach(cabalMapping => cabalChannelsToForwardTo.add(cabalMapping))
+        }
+      }
+    })
+    cabalBot.broadcast(cabalChannelsToForwardTo, msg.content)
+  }
+}
+
+function processMessageFromCabal(envelope) {
   const discordChannelsToForwardTo = new Set()
   config.mappings.forEach(mapping => {
     if (mapping.from === 'cabal' || mapping.from === 'both') {
@@ -61,4 +65,4 @@ cabalBot.on('new-message', (envelope, cabalDetails) => {
       discordChannel.send(envelope.message.value.content.text)
     }
   })
-})
+}
