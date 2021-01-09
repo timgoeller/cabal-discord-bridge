@@ -1,6 +1,10 @@
 # Cabal-Discord Bridge
 You can use this tool, to automatically send messages from Cabal to Discord and vice-versa. 
 
+## Steps to Run
+* Clone the repository
+* Create a config (see the config section)
+* Run `node index`
 ## Config
 For this bridge to work, a `config.json` file must exist at the application root. You can take a look at `config.example.json` to see how this file is structured.
 
