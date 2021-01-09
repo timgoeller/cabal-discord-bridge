@@ -77,7 +77,7 @@ function processMessageFromCabal (envelope, hooks) {
   hooks.webhooks.forEach((webhook) => {
     if (discordChannelsToForwardTo.has(webhook.channelName)) {
       webhook.send(envelope.message.value.content.text, {
-        username: `${'envelope.author.name' || '?'}@cabal`
+        username: `${envelope.author.name || '?'}@cabal`
       })
     }
   })
