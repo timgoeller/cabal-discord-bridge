@@ -46,7 +46,7 @@ discordBot.on('ready', async () => {
 })
 
 function processMessageFromDiscord (msg, hooks) {
-  log(2, `recieved msg event from discord: [author:${msg.author.username}:${msg.author.id}] [channel:#${msg.channel.name}] [msg:${msg.content}]`)
+  log(2, `received msg event from discord: [author:${msg.author.username}:${msg.author.id}] [channel:#${msg.channel.name}] [msg:${msg.content}]`)
   if (discordBot.user.id !== msg.author.id && !hooks.sentByBot(msg)) {
     const cabalChannelsToForwardTo = new Set()
     config.mappings.forEach(mapping => {
@@ -72,7 +72,7 @@ function processMessageFromDiscord (msg, hooks) {
 }
 
 function processMessageFromCabal(envelope, hooks) {
-  log(2, `recieved msg event from cabal: [author:${envelope.author.name}:${envelope.author.key}] [channel:#${envelope.channel}] [msg:${envelope.message.value.content.text}]`)
+  log(2, `received msg event from cabal: [author:${envelope.author.name}:${envelope.author.key}] [channel:#${envelope.channel}] [msg:${envelope.message.value.content.text}]`)
   const discordChannelsToForwardTo = new Set()
   config.mappings.forEach(mapping => {
     if (mapping.from === 'cabal' || mapping.from === 'both') {
