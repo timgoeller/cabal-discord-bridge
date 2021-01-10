@@ -1,5 +1,6 @@
 {
   "name": "Cabal-Discord-Bridge",
+  "logging": true,
   "mappings": [
     { "discord": ["general"],
       "cabal": ["default"],

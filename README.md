@@ -22,3 +22,6 @@ This array defines how messages should be passed between Cabal and Discord.
 "cabal": [] // Array of Cabal channels for this mapping
 "from": "cabal" || "discord" || "both" // Defines the direction in which messages should be bridged
 ```
+
+#### logging
+Set to `true`, to display forwarded messages along with meta information in console.

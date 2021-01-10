@@ -1,5 +1,6 @@
 const CabalBot = require('cabal-bot-core')
 const Discord = require('discord.js')
+const chalk = require('chalk')
 
 const fs = require('fs')
 let config = {}
@@ -60,6 +61,11 @@ function processMessageFromDiscord (msg, hooks) {
     const attachments = msg.attachments.reduce((attachmentString, attachment) => {
       return attachmentString + `[${attachment.name}](${attachment.url}) `
     }, '')
+
+    cabalChannelsToForwardTo.forEach(channel => {
+      log(1, chalk.gray(`[frm:#${msg.channel.name}] [to:#${channel}] [usr:${msg.author.username}] `) + `${msg.content}`)
+    })
+
     cabalBot.broadcast(cabalChannelsToForwardTo, `_${msg.author.username}@discord_: ${attachments}${msg.content}`)
   }
 }
@@ -76,11 +82,37 @@ function processMessageFromCabal (envelope, hooks) {
 
   hooks.webhooks.forEach((webhook) => {
     if (discordChannelsToForwardTo.has(webhook.channelName)) {
+      log(0, chalk.gray(`[frm:#${envelope.channel}] [to:#${webhook.channelName}] [usr:${envelope.author.name || '?'}] `) + `${envelope.message.value.content.text}`)
+
       webhook.send(envelope.message.value.content.text, {
         username: `${envelope.author.name || '?'}@cabal`
       })
     }
   })
+}
+
+function getTimestampPretty () {
+  const current = new Date()
+  const hours = current.getHours().toString().padStart(2, '0')
+  const minutes = current.getMinutes().toString().padStart(2, '0')
+  const seconds = current.getSeconds().toString().padStart(2, '0')
+
+  const month = (current.getMonth() + 1).toString().padStart(2, '0')
+  const date = current.getDate().toString().padStart(2, '0')
+  return `${date}/${month} ${hours}:${minutes}:${seconds}`
+}
+
+function log (type, message) {
+  if (config.logging) {
+    switch (type) {
+      case 0: // from cabal
+        console.log(`(${getTimestampPretty()}) ` + chalk.bold.blueBright('[cabal->discord] ') + message)
+        break
+      case 1: // from discord
+        console.log(`(${getTimestampPretty()}) ` + chalk.bold.greenBright('[discord->cabal] ') + message)
+        break
+    }
+  }
 }
 
 class WebhookController {
