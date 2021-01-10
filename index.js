@@ -71,8 +71,8 @@ function processMessageFromDiscord (msg, hooks) {
   }
 }
 
-function processMessageFromCabal (envelope, hooks) {
-  log(2, `recieved msg event from cabal: [author:${envelope.author.name}:${envelope.author.id}] [channel:#${envelope.channel}] [msg:${envelope.message.value.content.text}]`)
+function processMessageFromCabal(envelope, hooks) {
+  log(2, `recieved msg event from cabal: [author:${envelope.author.name}:${envelope.author.key}] [channel:#${envelope.channel}] [msg:${envelope.message.value.content.text}]`)
   const discordChannelsToForwardTo = new Set()
   config.mappings.forEach(mapping => {
     if (mapping.from === 'cabal' || mapping.from === 'both') {
