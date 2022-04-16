@@ -39,11 +39,6 @@ discordBot.on('ready', async () => {
   cabalBot.on('new-message', (envelope) => processMessageFromCabal(envelope, hooks))
 })
 
-// discordBot.on('guildCreate', async (arg) => {
-//   console.log('CREATE')
-//   console.log(arg)
-// })
-
 function processMessageFromDiscord (msg, hooks) {
   log(2, `received msg event from discord: [author:${msg.author.username}:${msg.author.id}] [channel:#${msg.channel.name}] [msg:${msg.content}]`)
   if (discordBot.user.id !== msg.author.id && !hooks.sentByBot(msg)) {
