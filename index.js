@@ -1,5 +1,5 @@
 const CabalBot = require('cabal-bot-core')
-const Discord = require('discord.js')
+const { Client, Intents } = require('discord.js')
 const chalk = require('chalk')
 
 const fs = require('fs')
@@ -10,7 +10,7 @@ try {
   throw new Error('Error while parsing config, make sure config.js exists')
 }
 
-const discordBot = new Discord.Client()
+const discordBot = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_WEBHOOKS, Intents.FLAGS.GUILDS] })
 
 if (!config.name) {
   config.name = 'discord-bridge'
@@ -21,29 +21,28 @@ const cabalOpts = {
     config: {
       temp: true
     }
-  }
+  },
+  channels: [...new Set(config.mappings.map((mapping) => mapping.cabal).flat())]
 }
 
 const WEBHOOK_NAME = 'Discord-Cabal-Bridge'
 const cabalBot = new CabalBot(config.name, cabalOpts)
-
 cabalBot.joinCabal(config.cabalKey)
 discordBot.login(config.discordSecret)
 
 //* doesn't fully work yet, won't send messages from channel x to all channels yet
 
 discordBot.on('ready', async () => {
-  if (!discordBot.guilds.cache.every((guild) => {
-    return guild.me.hasPermission(['MANAGE_WEBHOOKS'])
-  })) {
-    throw new Error('Bot needs MANAGE_WEBHOOKS permission!')
-  }
-
   const hooks = new WebhookController()
   hooks.getOrCreateWebhooks(discordBot)
-  discordBot.on('message', msg => processMessageFromDiscord(msg, hooks))
+  discordBot.on('messageCreate', msg => processMessageFromDiscord(msg, hooks))
   cabalBot.on('new-message', (envelope) => processMessageFromCabal(envelope, hooks))
 })
+
+// discordBot.on('guildCreate', async (arg) => {
+//   console.log('CREATE')
+//   console.log(arg)
+// })
 
 function processMessageFromDiscord (msg, hooks) {
   log(2, `received msg event from discord: [author:${msg.author.username}:${msg.author.id}] [channel:#${msg.channel.name}] [msg:${msg.content}]`)
@@ -125,7 +124,7 @@ class WebhookController {
   async getOrCreateWebhooks (client) {
     const webhookPromises = []
     client.channels.cache.forEach(channel => {
-      if (channel.type === 'text') {
+      if (channel.type === 'GUILD_TEXT') {      
         webhookPromises.push(async () => {
           const hooks = await channel.fetchWebhooks()
           let hook = hooks.find(h => h.name === WEBHOOK_NAME)
